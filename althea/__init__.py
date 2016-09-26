@@ -10,4 +10,4 @@ __author__ = 'Ben Neely'
 __license__ = 'GNU GENERAL PUBLIC LICENSE Version 3'
 __copyright__ = 'Copyright 2016 Ben Neely'
 
-from .Model import Model, metadata
+from .altheadata import DataModel, Model

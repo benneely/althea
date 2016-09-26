@@ -7,13 +7,14 @@ setup(name='althea',
       author='Ben Neely',
       author_email='nigelneely@gmail.com',
       license='GNU3',
-      packages=['robocomp'],
+      packages=['althea'],
       include_package_data=True,
-          package_data={
+      package_data={
         "althea": [
             "../README.md",
             "../MANIFEST.in",
-            "model_db/*",
+            "./model_db/framingham30/*",
+
         ]
     },
       install_requires=[

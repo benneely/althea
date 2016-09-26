@@ -2,7 +2,5 @@ include README.md
 include LICENSE
 include MANIFEST.in
 
-include *.ipynb
-
 recursive-include althea *
-recursive-include model_db *
+recursive-include ./model_db *

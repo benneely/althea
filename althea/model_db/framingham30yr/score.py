@@ -9,15 +9,20 @@ import pandas as pd
 import numpy as np
 import os
 import pickle
+import pandas as pd
 
 module_path = os.path.dirname(__file__) 
-#for qc: module_path = '/Users/nn31/Dropbox/40-githubRrepos/althea/althea'
-model = pickle.load(open(os.path.join(module_path, 'model_db', 'framingham30yr', 'model.p'),'rb'))
+#for qc:
+#module_path = '/Users/nn31/Dropbox/40-githubRrepos/althea/althea/model_db/framingham30yr/'
+print(module_path)
+model = pickle.load(open(os.path.join(module_path,'model.p'),'rb'))
 
 
 
-def modelResults(male,age,sbp,tc,hdlc,smoke,trtbp,diab,time=1340):
-    newtime=time
+def modelResults(male,age,sbp,tc,hdlc,smoke,trtbp,diab,time=30):
+    model_time = model.get('cvd').get('time')
+    indx = [i for i,x in enumerate(model_time) if model_time[i] < time]
+    newtime = max(indx)+1
     cvd_srv_fnc = model.get('cvd').get('survival_fnc')[:newtime]
     dth_srv_fnc = model.get('dth').get('survival_fnc')[:newtime]
     lcvd = model.get('lcvd')[:newtime]
@@ -63,32 +68,66 @@ def modelResults(male,age,sbp,tc,hdlc,smoke,trtbp,diab,time=1340):
             Lcvd_S[i] = scvd[i-1]*sdth[i-1]*np.exp(bcvdsum-model.get('cvd').get('mean_lp'))*lcvd[i]
     return(np.sum(Lcvd_S) )
      
+def score_matrix(x):
+    zz = pd.DataFrame(x)
+    results = zz.apply(lambda x: modelResults(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8]),axis=1)
+    return(results.to_dict())
+    
+def score(male='Female',
+          age=25,
+          sbp=110,
+          tc=150,
+          hdlc=60,
+          trtbp='No',
+          smoke='No',
+          diab='No',
+          time=30):
+    if male=='Male':
+        maley=1
+    else:
+        maley=0
+    if trtbp=='Yes':
+        trtbpy=1
+    else:
+        trtbpy=0
+    if smoke=='Yes':
+        smokey=1
+    else:
+        smokey=0
+    if diab=='Yes':
+        diaby=1
+    else:
+        diaby=0
+    matrix = np.array([[maley,age,sbp,tc,hdlc,smokey,trtbpy,diaby,time]])
+    return(score_matrix(matrix))
+    
+    
 #from the paper a couple of test cases to run through 
 #figure 3
 #~1%
-modelResults(age=25, male=0, tc=150, hdlc=60, trtbp=0, sbp=110, smoke=0, diab=0)
+#modelResults(age=25, male=0, tc=150, hdlc=60, trtbp=0, sbp=110, smoke=0, diab=0)
 #~3.5%
-age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=110; smoke=0; diab=0;   
-modelResults(age=25, male=0, tc=260, hdlc=35, trtbp=0, sbp=110, smoke=0, diab=0, time=1340)
+#age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=110; smoke=0; diab=0;   
+#modelResults(age=25, male=0, tc=260, hdlc=35, trtbp=0, sbp=110, smoke=0, diab=0)
 #~6%
-age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=0; diab=0;
-modelResults(age=25, male=1, tc=260, hdlc=35, trtbp=0, sbp=160, smoke=1, diab=1, time=1340)
+#age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=0; diab=0;
+#modelResults(age=25, male=1, tc=260, hdlc=35, trtbp=0, sbp=160, smoke=1, diab=1)
 #~12% 
-age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=0;
+#age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=0;
 #~26%
-age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
-modelResults(age=25, male=0, tc=260, hdlc=35, trtbp=0, sbp=160, smoke=1, diab=1, time=913)
+#age=25; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
+#modelResults(age=25, male=0, tc=260, hdlc=35, trtbp=0, sbp=160, smoke=1, diab=1)
 #missing
-age=3; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
+#age=3; male=0; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
 #figure 4
 #~1%
-age=25; male=1; tc=150; hdlc=60; trtbp=0; sbp=110; smoke=0; diab=0;
+#age=25; male=1; tc=150; hdlc=60; trtbp=0; sbp=110; smoke=0; diab=0;
 #~5%
-age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=110; smoke=0; diab=0;
+#age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=110; smoke=0; diab=0;
 #~10%
-age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=0; diab=0; 
+#age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=0; diab=0; 
 #~20%
-age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=0;
+#age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=0;
 #~40%
-age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
+#age=25; male=1; tc=260; hdlc=35; trtbp=0; sbp=160; smoke=1; diab=1;
 

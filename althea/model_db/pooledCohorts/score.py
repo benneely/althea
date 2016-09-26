@@ -122,10 +122,43 @@ def modelResults(male,nonHispAA,age,sbp,trtbp,tcl,hdl,diab,smoke):
 #    print(modelResults(1, 1, 55, 120, 0, 213, 50, 0, 0))    
 #test()
 
-def score(x):
+def score_matrix(x):
     zz = pd.DataFrame(x)
     results = zz.apply(lambda x: modelResults(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8]),axis=1)
     return(results.to_dict())
+    
+    
+def score(male='Yes',
+          nonHispAA='non-hispanic african american',
+          age=55,
+          sbp=110,
+          trtbp='Yes',
+          tcl=150,
+          hdl=60,
+          diab='No',
+          smoke='Yes'):
+    if male=='Yes':
+        maley=1
+    else:
+        maley=0
+    if trtbp=='Yes':
+        trtbpy=1
+    else:
+        trtbpy=0
+    if smoke=='Yes':
+        smokey=1
+    else:
+        smokey=0
+    if diab=='Yes':
+        diaby=1
+    else:
+        diaby=0
+    if nonHispAA=='non-hispanic african american':
+        nonhispaay=1
+    else:
+        nonhispaay=0
+    matrix = np.array([[maley,nonhispaay,age,sbp,trtbpy,tcl,hdl,diaby,smokey]])
+    return(score_matrix(matrix))
 
 #see what calls to make
 #q = np.zeros([1,9])
