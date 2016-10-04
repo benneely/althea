@@ -21,4 +21,9 @@ setup(name='althea',
           'numpy',
           'pandas'
       ],
+      entry_points={
+            'console_scripts': [
+                'althea = althea.__main__:main'
+            ]
+        },
       zip_safe=False)
