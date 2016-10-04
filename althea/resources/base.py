@@ -13,10 +13,10 @@ import uuid
 import sqlite3
 #import sys
 #sys.path.insert(0, os.path.expanduser('~/Dropbox/40-githubRrepos/althea/althea'))
-from .dynamicloader import dynamicloader as dl
+from althea.dynamicloader import dynamicloader as dl
+from althea import __app__, __filename__
 
-__app__='althea'
-__filename__='althea.db'
+
 module_path = os.path.dirname(__file__) 
 #for qc: module_path = '/Users/nn31/Dropbox/40-githubRrepos/althea/althea'
 
@@ -40,7 +40,7 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
                
-class DataModel():
+class Metadata():
     def __init__(self, *args, **kwargs):
         self.database = os.path.join(appdirs.user_data_dir(__app__),__filename__)
         if not os.path.exists(os.path.dirname(self.database)):

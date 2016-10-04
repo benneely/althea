@@ -23,7 +23,8 @@ setup(name='althea',
       ],
       entry_points={
             'console_scripts': [
-                'althea = althea.__main__:main'
+                'althea-registrator = althea.bin:registrator',
+                'althea-server = althea.bin:server',
             ]
         },
       zip_safe=False)
