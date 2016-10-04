@@ -43,10 +43,10 @@ Currently is is only available via (1)
 #### Python API
 To start playing with Althea, two risk algorithms can be loaded by default:
 ```
-from althea import DataModel, Model
+from althea import Metadata, Model
 #add_examples is a named parameter that loads two algorithms that ship with Althea:
 #Framingham 30 year CVD risk algorithm and the 2013 ACC/AHA Pooled Cohorts equation
-models = DataModel(add_examples=True)
+models = Metadata(add_examples=True)
 models_in_db = models.available_models()
 #'deb9cc20-603f-4926-8ab9-66bb88d2ce0a'
 #'cf8c7c12-0097-45ca-99cb-babcdd204d0e'
