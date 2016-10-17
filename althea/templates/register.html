@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<form id="bookForm" method="post" action='/models' class="form-horizontal">
+  <div class="form-group">
+    <label class="col-xs-1 control-label">Function</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" name="Function" placeholder="UNC Path to Function" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-xs-1 control-label">Model</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" name="ModelName" placeholder="Model Long Name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-xs-1 control-label">Response</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" name="Response" placeholder="Model Response (i.e. y variable in model)" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-xs-1 control-label">DOI</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" name="DOI" placeholder="Digital Object Identifier" />
+    </div>
+  </div>
+  <div class="form-group">
+        <label class="col-xs-1 control-label">Inputs</label>
+        <div class="col-xs-4">
+            <input type="text" class="form-control" name="input[0].q" placeholder="Question" />
+        </div>
+        <div class="col-xs-4">
+            <input type="text" class="form-control" name="input[0].type" placeholder="Type" />
+        </div>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" name="input[0].response" placeholder="Answers" />
+        </div>
+        <div class="col-xs-1">
+            <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+
+    <!-- The template for adding new field -->
+    <div class="form-group hide" id="bookTemplate">
+        <div class="col-xs-4 col-xs-offset-1">
+            <input type="text" class="form-control" name="q" placeholder="Question" />
+        </div>
+        <div class="col-xs-4">
+            <input type="text" class="form-control" name="type" placeholder="Type" />
+        </div>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" name="response" placeholder="Answers" />
+        </div>
+        <div class="col-xs-1">
+            <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+
+  <div class="form-group">
+      <div class="col-xs-5 col-xs-offset-1">
+          <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+  </div>
+</form>
+{% endblock %}

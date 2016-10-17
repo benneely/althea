@@ -1,0 +1,97 @@
+{% from "macros.html" import nav_link with context %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/css">
+      .container {
+        max-width: 800px;
+        padding-top: 100px;
+      }
+      h2 {color: red;}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">ALTHEA</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              {{ nav_link('models', 'Models Available') }}
+              {{ nav_link('register', 'Register New Model') }}
+            </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        {% block heading %}
+          <h1>{% block page %}{% endblock %} </h1>
+        {% endblock %}
+          <!-- <h2>This is part of my base template</h2>
+          <br> -->
+          {% block content %}{% endblock %}
+          <br>
+          <!-- <h2>This is part of my base template</h2> -->
+          <div class="footer">
+              {% block footer %}
+                &copy; Ben Neely 2016
+                <br>
+              {% endblock %}
+          </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+            // Add button click handler
+            var bookIndex = 0;
+            $('#bookForm')
+            .on('click', '.addButton', function() {
+                bookIndex++;
+                var $template = $('#bookTemplate'),
+                    $clone    = $template
+                                    .clone()
+                                    .removeClass('hide')
+                                    .removeAttr('id')
+                                    .attr('data-book-index', bookIndex)
+                                    .insertBefore($template);
+
+                // Update the name attributes
+                $clone
+                    .find('[name="title"]').attr('name', 'book[' + bookIndex + '].title').end()
+                    .find('[name="isbn"]').attr('name', 'book[' + bookIndex + '].isbn').end()
+                    .find('[name="price"]').attr('name', 'book[' + bookIndex + '].price').end();
+
+                // Add new fields
+                // Note that we also pass the validator rules for new field as the third parameter
+            })
+
+            // Remove button click handler
+            .on('click', '.removeButton', function() {
+                var $row  = $(this).parents('.form-group'),
+                    index = $row.attr('data-book-index');
+              // Remove element containing the fields
+                $row.remove();
+            });
+    });
+    </script>
+  </body>
+</html>
