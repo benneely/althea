@@ -21,10 +21,12 @@ At this time, *althea* is purely a python package. It is our hope to allow submi
 code in the future. Two avenues for installation are available:
 
 ####github
+Because we send some data with the package, we will use `pip install` to get the
+package onto disk, as opposed to `python setup.py install`
 ```
 git clone https://github.com/benneely/althea.git
 cd ./althea
-python setup.py install
+pip install --upgrade .
 ```
 
 ####pip
@@ -38,9 +40,41 @@ The goal is to have ALTHEA available via two api's:
   1. python
   2. RESTful
 
-Currently is is only available via (1)
 
-#### Python API
+### Access RESTful API resources
+Once althea is installed, bring up a command line and start the RESTful server:
+```
+althea-server
+```
+By default, it will run on http://localhost:8002. Right now, there are two endpoints
+available to query:
+
+1. /models - provides information on all models available
+2. /models/{id}/inputs - provides information specific to a particular model
+
+From within python we could utilize this resource as follows
+
+```
+import requests
+import json
+import pprint
+
+#get information pertaining to all models
+r = requests.get('http://localhost:8002/models')
+print(r.status_code)
+
+models = json.loads(r.text).get('result')
+pprint.pprint(models)
+
+
+#get information pertaining to a single model
+uuid = models[0].get('model_uuid')
+specific_model = requests.get('http://localhost:8002/models/'+uuid+'/inputs')
+print(specific_model.status_code)
+pprint.pprint(json.loads(specific_model.text))
+```
+
+### Python API
 To start playing with Althea, two risk algorithms can be loaded by default:
 ```
 from althea import Metadata, Model

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request
+from flask import Flask
 from flask_restful import Resource, Api
 import sqlite3
-from json import dumps
+import json
 from althea import __app__, __filename__
-from althea.resources.base import dict_factory, Model
+from althea.resources.base import dict_factory
 import appdirs
 import os
 import sys
@@ -26,7 +26,7 @@ class Althea_Meta(Resource):
         sql = "select * from models"
         c.execute(sql)
         metadata = c.fetchall()
-        return metadata
+        return {'result':metadata}
 
 class Model_Input(Resource):
     def get(self, model_uuid):
@@ -36,7 +36,7 @@ class Model_Input(Resource):
         sql = "select * from inputs where model_uuid=?"
         c.execute(sql,[(model_uuid)])
         metadata = c.fetchall()
-        return metadata
+        return {'result':metadata}
         
 
 api.add_resource(Model_Input, '/models/<string:model_uuid>/inputs')
