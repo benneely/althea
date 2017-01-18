@@ -17,8 +17,7 @@ each consumer can call one central source of truth, ensuring reproducibility and
 
 ##Installation
 ---------
-At this time, *althea* is purely a python package. It is our hope to allow submission of other types of
-code in the future. Two avenues for installation are available:
+Two avenues for installation:
 
 ####github
 Because we send some data with the package, we will use `pip install` to get the
@@ -88,3 +87,13 @@ models_in_db = models.available_models()
 framingham = Model(models_in_db[0].get('model_uuid'))
 framingham.score(sbp=120,male='No',smoke='Yes',tc=60,hdlc=110,age=33,diab='No',trtbp='No')
 ```
+
+## Add new models
+To add new models to the database for query, we've create a "registrator" - a Flask
+application that allows users to update the sqlite database. To use, from the command
+line:
+
+```
+althea-registrator
+```
+**At this time, this is only framed out, it's not functional at this time**
